@@ -85,12 +85,24 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
 	var nextTrain = moment().add(tMinutesTillTrain, "minutes");
 	console.log("ARRIVAL TIME: "+ moment(nextTrain).format("hh:mm"));
 
-         
+	var amPm = "";
+
+	if (nextTrain < 12){
+		amPm = "AM";
+	}
+
+	else{
+		amPm = "PM";
+	}
+
+	if (nextTrain > 12){
+		nextTrain = nextTrain - 12;
+	}
 
 	   
 
 	// Change the HTML to reflect
-	$("#newEntry").append("<tr><br><td>" + childSnapshot.val().name + "</td><br><td>" + childSnapshot.val().dest + "</td><br><td>" + childSnapshot.val().freq + "</td><br><td>" + moment(nextTrain).format("hh:mm") + "</td><br><td>" + tMinutesTillTrain + "</td>");
+	$("#newEntry").append("<tr><br><td>" + childSnapshot.val().name + "</td><br><td>" + childSnapshot.val().dest + "</td><br><td>" + childSnapshot.val().freq + "</td><br><td>" + moment(nextTrain).format("hh:mm") + amPm + "</td><br><td>" + tMinutesTillTrain + "</td>");
 })
 
 
