@@ -20,16 +20,17 @@ var nextArrival = 0;
 var minTil = 0;
 
 
-$('#sumbit').on('click', function() {
+$('#submit').on('click', function() {
 
 	var name = $('#name').val().trim();
 	var dest = $('#destinationInput').val().trim();
 	var freq = $('#frequencyInput').val().trim();
-	
+	var firstT = $('#firstTInput').val().trim();
 
 	trainName = name;
 	destination = dest;
 	frequency = freq;
+	firstTrain = firstT;
 
 
 	
@@ -37,12 +38,14 @@ $('#sumbit').on('click', function() {
 	console.log(name);
 	console.log(dest);
 	console.log(freq);
+	colsole.log(firstT);
 
 
 	dataRef.ref().push( {
 		name: name,
 		dest: dest,
 		freq: freq,
+		firstT: firstT,
 
 		
 	});
@@ -59,6 +62,7 @@ dataRef.ref().on("child_added", function(snapshot) {
     console.log(snapshot.val().name);
     console.log(snapshot.val().dest);
     console.log(snapshot.val().freq);
+	console.log(snapshot.val().firstT);
    
 
    // Change the HTML to reflect
@@ -66,7 +70,35 @@ dataRef.ref().on("child_added", function(snapshot) {
     var $name = $("<h4 id='nameDisplay'>" + childSnapshot.val().name + "</h4>");
     var $dest = $("<h4 id='destDisplay'>" + childSnapshot.val().dest + "</h4>");
     var $freq = $("<h4 id='freqDisplay'>" + childSnapshot.val().freq + "</h4>");
-	
+	var $firstT = $("<h4 id='firstTDisplay'>" + childSnapshot.val().firstT + "</h4>");
+	var tFrequency = freq;
+	var firstTime = firstT;
+
+	//first time (pushed back 1 year to make sure it comes before current time)
+	var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1,"years");
+	console.log(firstTimeConverted);
+
+
+	//current time
+	var currentTime= moment();
+	console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+
+	//diference between the times
+	var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+	console.log("DIFFERENCE IN TIME: "+ diffTime);
+
+	//time apart(remainder)
+	var tRemainder = diffTime % tFrequency;
+	console.log(tRemainder);
+
+	//minute unitl train
+	var tMinutesTillTrain = tFrequency - tRemainder;
+	console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+	//next train
+	var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+	console.log("ARRIVAL TIME: "+ moment(nextTrain).format("hh:mm"));
+
        
 
 	   
@@ -84,36 +116,9 @@ dataRef.ref().on("child_added", function(snapshot) {
 
 dataRef.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot){
 	// Change the HTML to reflect
-	$("#newEntry").append("<tr>" + "<br>" + "<td>" + snapshot.val().name + "</td>" + "<br>" + "<td>" + snapshot.val().dest + "</td>" + "<br>" + "<td>" + snapshot.val().freq + "</td>" + "<br>" + "<td>" + "</td>" + "<td>");
+	$("#newEntry").append("<tr><br><td>" + snapshot.val().name + "</td><br><td>" + snapshot.val().dest + "</td><br><td>" + snapshot.val().freq + "</td><br><td></td><td>");
 })
 
 
-var tFrequency = 5;
-var firstTime = "06:00";
-
-//first time (pushed back 1 year to make sure it comes before current time)
-var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1,"years");
-console.log(firstTimeConverted);
-
-
-//current time
-var currentTime= moment();
-console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
-
-//diference between the times
-var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-console.log("DIFFERENCE IN TIME: "+ diffTime);
-
-//time apart(remainder)
-var tRemainder = diffTime % tFrequency;
-console.log(tRemainder);
-
-//minute unitl train
-var tMinutesTillTrain = tFrequency - tRemainder;
-console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
-
-//next train
-var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-console.log("ARRIVAL TIME: "+ moment(nextTrain).format("hh:mm"));
 
 
