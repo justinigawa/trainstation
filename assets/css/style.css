@@ -1,5 +1,12 @@
 .jumbotron{
-	color: green !important;
+	color: white !important;
+	-webkit-text-stroke: 1px black;
+	text-shadow:
+    	3px 3px 0 #000,
+    	-1px -1px 0 #000,  
+    	1px -1px 0 #000,
+    	-1px 1px 0 #000,
+    	1px 1px 0 #000;
 	text-align: center;
 	background-image: url("../images/train.jpeg");
 	background-repeat: no-repeat;
@@ -7,9 +14,7 @@
 	
 }
 
-.jumbotron.url{
-	opacity: 0.5;
-}
+
 
 .panel-heading{
 	background-color: blue !important;
