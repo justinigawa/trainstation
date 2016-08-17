@@ -1,5 +1,5 @@
 .jumbotron{
-	color: black !important;
+	color: green !important;
 	text-align: center;
 	background-image: url("../images/train.jpeg");
 	background-repeat: no-repeat;
@@ -7,7 +7,7 @@
 	
 }
 
-.jumbotron.background-img{
+.jumbotron.url{
 	opacity: 0.5;
 }
 

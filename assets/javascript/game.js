@@ -10,7 +10,7 @@
 
 
 // Create a variable to reference the database
-var dataRef = firebase.database();
+var database = firebase.database();
 
 // Initial Values
 var trainName = "";
@@ -27,42 +27,31 @@ $('#submit').on('click', function() {
 	var freq = $('#frequencyInput').val().trim();
 	var firstT = $('#firstTInput').val().trim();
 
-	trainName = name;
-	destination = dest;
-	frequency = freq;
-	firstTrain = firstT;
-
-
-	
-
-	console.log(name);
-	console.log(dest);
-	console.log(freq);
-	colsole.log(firstT);
-
-
-	dataRef.ref().push( {
+	database.ref().push( {
 		name: name,
 		dest: dest,
 		freq: freq,
 		firstT: firstT,
-
-		
 	});
+
+	$("#name").val("");
+	$("#destinationInput").val("");
+	$("#frequencyInput").val("");
+	$("#firstTInput").val("");
 
 	return false;
 
 });
 
 //Firebase watcher + initial loader HINT: .on("value")
-dataRef.ref().on("child_added", function(snapshot) {
+database.ref().on("child_added", function(childSnapshot, prevChildKey) {
 
-    // Log everything that's coming out of snapshot
-    console.log(snapshot.val());
-    console.log(snapshot.val().name);
-    console.log(snapshot.val().dest);
-    console.log(snapshot.val().freq);
-	console.log(snapshot.val().firstT);
+    // Log everything that's coming out of childSnapshot
+    console.log(childSnapshot.val());
+    console.log(childSnapshot.val().name);
+    console.log(childSnapshot.val().dest);
+    console.log(childSnapshot.val().freq);
+	console.log(childSnapshot.val().firstT);
    
 
    // Change the HTML to reflect
@@ -71,8 +60,8 @@ dataRef.ref().on("child_added", function(snapshot) {
     var $dest = $("<h4 id='destDisplay'>" + childSnapshot.val().dest + "</h4>");
     var $freq = $("<h4 id='freqDisplay'>" + childSnapshot.val().freq + "</h4>");
 	var $firstT = $("<h4 id='firstTDisplay'>" + childSnapshot.val().firstT + "</h4>");
-	var tFrequency = freq;
-	var firstTime = firstT;
+	/*var tFrequency = childSnapshot.val().freq;
+	var firstTime = childSnapshot.val().firstT;
 
 	//first time (pushed back 1 year to make sure it comes before current time)
 	var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1,"years");
@@ -97,7 +86,7 @@ dataRef.ref().on("child_added", function(snapshot) {
 
 	//next train
 	var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-	console.log("ARRIVAL TIME: "+ moment(nextTrain).format("hh:mm"));
+	console.log("ARRIVAL TIME: "+ moment(nextTrain).format("hh:mm"));*/
 
        
 
@@ -114,9 +103,9 @@ dataRef.ref().on("child_added", function(snapshot) {
     console.log("Errors handled: " + errorObject.code)
 });
 
-dataRef.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot){
+database.ref().orderByChild("dateAdded").limitToLast(7).on("child_added", function(childSnapshot){
 	// Change the HTML to reflect
-	$("#newEntry").append("<tr><br><td>" + snapshot.val().name + "</td><br><td>" + snapshot.val().dest + "</td><br><td>" + snapshot.val().freq + "</td><br><td></td><td>");
+	$("#newEntry").append("<tr><br><td>" + childSnapshot.val().name + "</td><br><td>" + childSnapshot.val().dest + "</td><br><td>" + childSnapshot.val().freq + "</td><br><td></td><td>");
 })
 
 
