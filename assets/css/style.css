@@ -1,0 +1,17 @@
+.jumbotron{
+	color: black !important;
+	text-align: center;
+	background-image: url("../images/train.jpeg");
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	
+}
+
+.jumbotron.background-img{
+	opacity: 0.5;
+}
+
+.panel-heading{
+	background-color: blue !important;
+	color: white !important;
+}
